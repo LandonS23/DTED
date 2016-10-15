@@ -32,14 +32,20 @@ namespace DTED.DTED_Reader
         * Function will take byte representation of a data record
         * and parse it into elevation data and place the data in the
         * specified column that represents page of a data record.
+        * Keep in mind the first elevation value is the sourthen most
+        * data point and the last elevation value is the northern most point.
+        * This means the array must be filled from the last element to the first 
+        * element (reverse order), if the data is to be mapped easily to
+        * the precise latitude and longitude point.
         *
         * NOTE: Might want to check out different way besides passing 
         * array by reference
         */
         private int[] parseDataRecord(byte[] data)
         {
-            int row = 0; // Start at row zero
-            int numElev = ((FileConstants.SIZE_DATA_REC - FileConstants.SIZE_CHECKSUM) - 8) / FileConstants.SIZE_ELEVATION; // Number of elevations is related to '*.dt1' file
+            // Number of elevations is related to '*.dt1' file
+            int numElev = ((FileConstants.SIZE_DATA_REC - FileConstants.SIZE_CHECKSUM) - 8) / FileConstants.SIZE_ELEVATION; 
+            int row = numElev - 1; // Start at last element in array
 
             byte[] byteElev = new byte[FileConstants.SIZE_ELEVATION]; // Initialize small array to size of elevation data piece
             int[] elevData = new int[numElev]; // Create array to store elevations of one data record
@@ -47,7 +53,7 @@ namespace DTED.DTED_Reader
             // Iterate through each elevation record and assign value to 'elev' paramater at specified row and column
             for (int i = FileConstants.LOC_START_ELEVATION;
             i < (FileConstants.SIZE_DATA_REC - FileConstants.SIZE_CHECKSUM); 
-                i+= FileConstants.SIZE_ELEVATION, ++row)
+                i+= FileConstants.SIZE_ELEVATION, --row)
             {
                 // Fill in byte data and use it to parse to 'Int16'
                 byteElev[0] = data[i];
@@ -70,8 +76,8 @@ namespace DTED.DTED_Reader
             string result;
             string lonInterval;
             string latInterval;
-            string numLat;
-            string numLon;
+            int numLat;
+            int numLon;
             int[][] elevGrid; // Create array of arrays where each element contains a page of each data record
 
             // Skip bytes to origin buffer
@@ -117,13 +123,13 @@ namespace DTED.DTED_Reader
 
             // Read Number of Latitude
             buffer = reader.ReadBytes(FileConstants.SIZE_NUMBER_LONGITUDE);
-            numLon = Encoding.ASCII.GetString(buffer);
+            numLon = int.Parse(Encoding.ASCII.GetString(buffer));
 
             // Read Number of Longitude
             buffer = reader.ReadBytes(FileConstants.SIZE_NUMBER_LATITUDE);
-            numLat = Encoding.ASCII.GetString(buffer);
+            numLat = int.Parse(Encoding.ASCII.GetString(buffer));
 
-            elevGrid = new int[int.Parse(numLon)][]; // Allocate 'elevData' based on size of latitude and longitude amount
+            elevGrid = new int[numLon][]; // Allocate 'elevData' based on size of latitude and longitude amount
 
             // Skip the rest of the UHL header file
             reader.BaseStream.Seek((FileConstants.SIZE_MULTIPLE_ACC + FileConstants.SIZE_RESERVED),

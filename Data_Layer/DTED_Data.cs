@@ -4,7 +4,7 @@
     public struct UHL_Header
     {
         /* The longitude of origin */
-        public Longitude longitudeOrigin;
+        private Longitude longitudeOrigin;
 
         /* Property */
         public Longitude LongitudeOrigin
@@ -16,7 +16,7 @@
         }
 
         /* The latitude of origin */
-        public Latitude latitudeOrigin;
+        private Latitude latitudeOrigin;
 
         /* Property */
         public Latitude LatitudeOrigin
@@ -28,7 +28,7 @@
         }
 
         /* The longitude interval */
-        public double longitudeInterval;
+        private double longitudeInterval;
 
         /* Property */
         public double LongitudeInterval
@@ -40,7 +40,7 @@
         }
 
         /* The latitude interval */
-        public double latitudeInterval;
+        private double latitudeInterval;
 
         /* Property */
         public double LatitudeInterval
@@ -52,10 +52,10 @@
         }
 
         /* Number of longitude lines */
-        public string numberLongitudeLines;
+        private int numberLongitudeLines;
 
         /* Property */
-        public string NumberLongitudeLines
+        public int NumberLongitudeLines
         {
             get
             {
@@ -64,10 +64,10 @@
         }
 
         /* Number of latitude points per longitude line */
-        public string numberLatitudeLines;
+        private int numberLatitudeLines;
 
         /* Property */
-        public string NumberLatitudeLines
+        public int NumberLatitudeLines
         {
             get
             {
@@ -77,7 +77,7 @@
 
         /* Constructor for UHL */
         public UHL_Header(Longitude lonOrigin, Latitude latOrigin, string lonInterval, string latInterval,
-            string numLatLines, string numLonLines)
+            int numLatLines, int numLonLines)
         {
             longitudeOrigin = lonOrigin;
             latitudeOrigin = latOrigin;
@@ -108,15 +108,34 @@
     public class DTED_Data
     {
         /* Header of DTED file */
-        public UHL_Header header;
+        private UHL_Header header;
+
+        /* Property */
+        public UHL_Header Header
+        {
+            get
+            {
+                return header;
+            }
+        }
 
         /* Array of arrays consisting of elevation records, where each column is a data record list of elevations along longitude */
-        public int[][] elevationGrid;
+        private int[][] elevationGrid;
+
+        /* Property */
+        public int[][] ElevationGrid
+        {
+            get
+            {
+                return elevationGrid;
+            }
+        }
 
         /* Initialize object with passed data*/
         public DTED_Data(UHL_Header head, int[][] elevGrid)
         {
             header = head;
+            elevationGrid = elevGrid;
         }
 
         /* Returns human readable representation of 'DTED_DATA' */

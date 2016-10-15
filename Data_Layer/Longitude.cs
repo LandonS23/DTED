@@ -1,4 +1,6 @@
-﻿namespace DTED.Data_Layer
+﻿using System;
+
+namespace DTED.Data_Layer
 {
     /* The class abstracts the longitude data that will be
      * read from the file. The data members will consist
@@ -45,7 +47,7 @@
         }
 
         /* Property */
-        public double Seconds
+        public int Seconds
         {
             get
             {
@@ -86,8 +88,17 @@
         {
             Degrees = int.Parse(deg);
             Minutes = int.Parse(min);
-            Seconds = double.Parse(sec);
+            Seconds = int.Parse(sec);
             Heading = char.Parse(heading);
+        }
+
+        /* Constructor creates longitude from decimal 
+        * degree representation */
+        public Longitude(double decimalDeg)
+        {
+            Degrees = (int) decimalDeg; // Truncate decimal and set to degree value
+            Minutes = (int)((decimalDeg * MINUTES_PER_DEG) % MINUTES_PER_DEG);
+            Seconds = (int)((Math.Abs(decimalDeg) * SECONDS_PER_DEG) / SECONDS_PER_DEG);
         }
 
         /* Returns a human readable representation of latitude */

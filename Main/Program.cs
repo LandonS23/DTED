@@ -2,6 +2,7 @@
 
 using DTED.Data_Layer;
 using DTED.DTED_Reader;
+using DTED.DataMapping;
 
 /*
 * Would like to eliminate multiple calls to 
@@ -18,6 +19,8 @@ namespace DTED
             DTED_Data fileData; // Declare 'DTED_Data' object
             FileReader reader = new FileReader(testFileName);
             reader.read(out fileData); // Pass 'fileData' by reference to be manipulated
+            DataMapper mapper = new DataMapper(fileData);
+            mapper.map();
         }
     }
 }

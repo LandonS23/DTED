@@ -34,10 +34,16 @@
         public const int MIN_MINUTES = 0;
 
         /* Maximum value for seconds coordinate */
-        public const double MAX_SECONDS = 60.0;
+        public const int MAX_SECONDS = 60;
 
         /* Minimum value for seconds coordinate */
-        public const double MIN_SECONDS = 0.0;
+        public const int MIN_SECONDS = 0;
+
+        /* Amount of minutes per degree */
+        public const int MINUTES_PER_DEG = 60;
+
+        /* Amount of seconds per degree */
+        public const int SECONDS_PER_DEG = 3600;
 
         /* The degree part of the coordinate */
         protected int degrees;
@@ -45,10 +51,25 @@
         /* The minute part of the coordinate */
         protected int minutes;
 
-        /* The minute part of the coordinate */
-        protected double seconds;
+        /* The seconds part of the coordinate */
+        protected int seconds;
 
         /* The heading for the coordinate */
         protected char heading;
+
+        /* Method convertes geographic coordinate into decimal 
+        * value for easier mathematical manipulation */
+        public double getDecimalDegree()
+        {
+            double decimalDeg = degrees + (double)(minutes / 60) + (double)(seconds / 3600);
+
+            // If heading is either south or west we need to negate value
+            if('S'.Equals(heading) || 'W'.Equals(heading)) 
+            {
+                decimalDeg = -decimalDeg;
+            }
+
+            return decimalDeg;
+        }
     }
 }
