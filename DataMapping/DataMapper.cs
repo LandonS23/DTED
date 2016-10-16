@@ -29,37 +29,37 @@ namespace DTED.DataMapping
         {
             // First, the latitude and longitude intervals must be listed!
             int numberLat;
-            double latitudeInterDecimal;
+            int latitudeInter;
             int numberLon;
-            double longitudeInterDecimal;
+            int longitudeInter;
 
             // Retrieve data from the header of DTED to create latitude/longitude grid
             numberLat = fileData.Header.NumberLatitudeLines;
-            latitudeInterDecimal = fileData.Header.LatitudeInterval / 3600; // Get interval of latitude in decimal value
+            latitudeInter = (int) fileData.Header.LatitudeInterval; // Get interval of latitude in decimal value
             numberLon = fileData.Header.NumberLongitudeLines;
-            longitudeInterDecimal = fileData.Header.LongitudeInterval / 3600; // Get interval of longitude in decimal value
+            longitudeInter = (int) fileData.Header.LongitudeInterval; // Get interval of longitude in decimal value
 
-            // Get decimal degree of the origin point for cell
-            double latDecimal = fileData.Header.LatitudeOrigin.getDecimalDegree();
-            double lonDecimal = fileData.Header.LongitudeOrigin.getDecimalDegree();
+            // Get latitude/longitude origin
+            Latitude currLatit = fileData.Header.LatitudeOrigin;
+            Longitude currLongi = fileData.Header.LongitudeOrigin;
 
-            double[] latValues = new double[numberLat];
-            double[] lonValues = new double[numberLon];
+            Latitude[] latValues = new Latitude[numberLat];
+            Longitude[] lonValues = new Longitude[numberLon];
 
             MappedData[,] mappedData = new MappedData[numberLat, numberLon];
 
             // Generate latitude values for grid based on interval from file
             for(int i = 0; i < numberLat; ++i)
             {
-                latValues[i] = latDecimal;
-                latDecimal += latitudeInterDecimal;
+                latValues[i] = currLatit;
+                currLatit = currLatit.addInterval(0, 0, latitudeInter);
             }
 
             // Generate longitude values for grid based on interval from file
             for(int i = 0; i < numberLon; ++i)
             {
-                lonValues[i] = lonDecimal;
-                lonDecimal += longitudeInterDecimal;
+                lonValues[i] = currLongi;
+                currLongi = currLongi.addInterval(0, 0, longitudeInter);
             }
 
             int[][] elevData = fileData.ElevationGrid; // Get elevation data to map onto latitude and longitude posts

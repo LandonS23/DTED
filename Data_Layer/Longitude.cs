@@ -92,6 +92,27 @@ namespace DTED.Data_Layer
             Heading = char.Parse(heading);
         }
 
+        /*
+        * Constructor takes in integers and character to initialize 
+        * the object
+        */
+        private Longitude(int deg, int min, int sec, char heading)
+        {
+            Degrees = deg;
+            Minutes = min;
+            Seconds = sec;
+            Heading = heading;
+        }
+
+        /* Copy constructor */
+        public Longitude(Longitude lat)
+        {
+            Degrees = lat.Degrees;
+            Minutes = lat.Minutes;
+            Seconds = lat.Seconds;
+            Heading = lat.Heading;
+        }
+
         /* Constructor creates longitude from decimal 
         * degree representation */
         public Longitude(double decimalDeg)
@@ -109,6 +130,24 @@ namespace DTED.Data_Layer
             Degrees = (int) Math.Floor(absDecimalDeg); // Take floor of decimal and convert to 'int'
             Minutes = (int) Math.Floor(MINUTES_PER_DEG * (absDecimalDeg - Degrees)); // Convert to minutes and take floor
             Seconds = (int) Math.Floor((SECONDS_PER_DEG * (absDecimalDeg - Degrees) - MINUTES_PER_DEG * Minutes)); // Convert to seconds
+        }
+
+        /* Function adds interval value to latitude and return new
+            longitude object */
+        public Longitude addInterval(int deg, int min, int sec)
+        {
+            // Declarations
+            int newSec;
+            int newMin;
+            int newDeg;
+
+            newSec = Seconds + sec;
+            newMin = Minutes + min + (Seconds / SECONDS_PER_MINUTE);
+            newSec %= SECONDS_PER_MINUTE;
+            newDeg = Degrees + deg + (Minutes / MINUTES_PER_DEG);
+            newMin %= MINUTES_PER_DEG;
+
+            return new Longitude(newDeg, newMin, newSec, Heading);
         }
 
         /* Returns a human readable representation of latitude */

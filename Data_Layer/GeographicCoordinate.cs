@@ -45,6 +45,9 @@
         /* Amount of seconds per degree */
         public const int SECONDS_PER_DEG = 3600;
 
+        /* Amount of seconds per minute */
+        public const int SECONDS_PER_MINUTE = 60;
+
         /* The degree part of the coordinate */
         protected int degrees;
 
