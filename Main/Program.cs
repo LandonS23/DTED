@@ -1,12 +1,10 @@
-﻿using System;
-
-using DTED.Data_Layer;
+﻿using DTED.Data_Layer;
 using DTED.DTED_Reader;
 using DTED.DataMapping;
+using System;
 
 /*
-* Would like to eliminate multiple calls to 
-* 'Array.Resize(...)' as it could create potenial bugs later...
+* Entry point for project for testing...
 */
 namespace DTED
 {
@@ -21,6 +19,10 @@ namespace DTED
             reader.read(out fileData); // Pass 'fileData' by reference to be manipulated
             DataMapper mapper = new DataMapper(fileData);
             mapper.map();
+
+            byte[] bytes = { 255, 5 };
+
+            int num = BitConverter.ToInt16(bytes, 0);
         }
     }
 }

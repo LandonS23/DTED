@@ -96,9 +96,19 @@ namespace DTED.Data_Layer
         * degree representation */
         public Longitude(double decimalDeg)
         {
-            Degrees = (int) decimalDeg; // Truncate decimal and set to degree value
-            Minutes = (int)((decimalDeg * MINUTES_PER_DEG) % MINUTES_PER_DEG);
-            Seconds = (int)((Math.Abs(decimalDeg) * SECONDS_PER_DEG) / SECONDS_PER_DEG);
+            if(decimalDeg < 0.0) // Negative is west
+            {
+                Heading = 'W';
+            }
+            else // Positive is east
+            {
+                Heading = 'E';
+            }
+
+            double absDecimalDeg = Math.Abs(decimalDeg); // Take absolute value for conversion
+            Degrees = (int) Math.Floor(absDecimalDeg); // Take floor of decimal and convert to 'int'
+            Minutes = (int) Math.Floor(MINUTES_PER_DEG * (absDecimalDeg - Degrees)); // Convert to minutes and take floor
+            Seconds = (int) Math.Floor((SECONDS_PER_DEG * (absDecimalDeg - Degrees) - MINUTES_PER_DEG * Minutes)); // Convert to seconds
         }
 
         /* Returns a human readable representation of latitude */

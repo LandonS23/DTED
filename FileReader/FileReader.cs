@@ -55,6 +55,13 @@ namespace DTED.DTED_Reader
             i < (FileConstants.SIZE_DATA_REC - FileConstants.SIZE_CHECKSUM); 
                 i+= FileConstants.SIZE_ELEVATION, --row)
             {
+                /*
+                * POTENIAL BUG: Because of the vague and contradictory information in 
+                * file docuementation. Converting any negative elevation values may provide 
+                * incorrect results! This will need to be further explored during test phase 
+                * and 'ironed out' by maintenance.
+                */
+
                 // Fill in byte data and use it to parse to 'Int16'
                 byteElev[0] = data[i];
                 byteElev[1] = data[i+1];
